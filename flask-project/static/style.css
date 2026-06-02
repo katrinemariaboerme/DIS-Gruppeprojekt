@@ -1,0 +1,87 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #111;
+    color: white;
+}
+
+header {
+    background-color: #000;
+    padding: 25px;
+    text-align: center;
+}
+
+h1 {
+    color: #e50914;
+    font-size: 48px;
+    margin: 0;
+}
+
+nav {
+    margin-top: 15px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #e50914;
+}
+
+main {
+    padding: 30px;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.movie-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.movie-card {
+    background-color: #1c1c1c;
+    width: 250px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.movie-card h3 {
+    color: #e50914;
+    margin-top: 0;
+}
+
+.movie-card p {
+    color: #ddd;
+}
+
+button {
+    background-color: #e50914;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+button:hover {
+    background-color: #b00610;
+}
+
+.favorite-button {
+    background-color: #444;
+}
+
+.favorite-button:hover {
+    background-color: #666;
+}

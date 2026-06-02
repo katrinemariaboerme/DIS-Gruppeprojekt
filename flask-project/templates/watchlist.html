@@ -2,28 +2,33 @@
 <html>
 <head>
     <title>My Watchlist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>My Watchlist</h1>
+    <header>
+        <h1>WatchFlix</h1>
 
-    <nav>
-        <a href="/">Home</a>
-        <a href="/watchlist">My Watchlist</a>
-        <a href="/favorites">Favorites</a>
-    </nav>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/watchlist">My Watchlist</a>
+            <a href="/favorites">Favorites</a>
+        </nav>
+    </header>
 
-    <h2>Things I Want to Watch</h2>
+    <main>
+        <h2>My Watchlist</h2>
 
-    <div>
-        {% for item in items %}
-            <div>
-                <h3>{{ item[0] }}</h3>
-                <p>Type: {{ item[1] }}</p>
-                <p>Release year: {{ item[2] }}</p>
-                <p>IMDb rating: {{ item[3] }}</p>
-                <p>Status: {{ item[4] }}</p>
-            </div>
-        {% endfor %}
-    </div>
+        <div class="movie-container">
+            {% for item in items %}
+                <div class="movie-card">
+                    <h3>{{ item[0] }}</h3>
+                    <p>Type: {{ item[1] }}</p>
+                    <p>Release year: {{ item[2] }}</p>
+                    <p>IMDb rating: {{ item[3] }}</p>
+                    <p>Status: {{ item[4] }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
 </body>
 </html>

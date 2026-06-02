@@ -2,33 +2,44 @@
 <html>
 <head>
     <title>WatchFlix</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>WatchFlix</h1>
+    <header>
+        <h1>WatchFlix</h1>
 
-    <nav>
-        <a href="/">Home</a>
-        <a href="/watchlist">My Watchlist</a>
-        <a href="/favorites">Favorites</a>
-    </nav>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/watchlist">My Watchlist</a>
+            <a href="/favorites">Favorites</a>
+        </nav>
+    </header>
 
-    <h2>Movies and TV Shows</h2>
+    <main>
+        <h2>Movies and TV Shows</h2>
 
-    <p>Welcome to WatchFlix. Here you can browse movies and TV shows and add them to your personal watchlist.</p>
+        <p>
+            Welcome to WatchFlix. Here you can browse movies and TV shows and add them to your personal watchlist.
+        </p>
 
-    <div>
-        {% for item in content %}
-            <div>
-                <h3>{{ item[1] }}</h3>
-                <p>Type: {{ item[2] }}</p>
-                <p>Release year: {{ item[3] }}</p>
-                <p>IMDb rating: {{ item[4] }}</p>
+        <div class="movie-container">
+            {% for item in content %}
+                <div class="movie-card">
+                    <h3>{{ item[1] }}</h3>
+                    <p>Type: {{ item[2] }}</p>
+                    <p>Release year: {{ item[3] }}</p>
+                    <p>IMDb rating: {{ item[4] }}</p>
 
-                <form action="/add/{{ item[0] }}" method="post">
-                    <button type="submit">Add to watchlist</button>
-                </form>
-            </div>
-        {% endfor %}
-    </div>
+                    <form action="/add/{{ item[0] }}" method="post">
+                        <button type="submit">Add to watchlist</button>
+                    </form>
+
+                    <form action="/favorite/{{ item[0] }}" method="post">
+                        <button class="favorite-button" type="submit">Favorite</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
 </body>
 </html>
