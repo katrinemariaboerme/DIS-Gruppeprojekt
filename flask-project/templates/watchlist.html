@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Watchlist</title>
+</head>
+<body>
+    <h1>My Watchlist</h1>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/watchlist">My Watchlist</a>
+        <a href="/favorites">Favorites</a>
+    </nav>
+
+    <h2>Things I Want to Watch</h2>
+
+    <div>
+        {% for item in items %}
+            <div>
+                <h3>{{ item[0] }}</h3>
+                <p>Type: {{ item[1] }}</p>
+                <p>Release year: {{ item[2] }}</p>
+                <p>IMDb rating: {{ item[3] }}</p>
+                <p>Status: {{ item[4] }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

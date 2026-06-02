@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favorites</title>
+</head>
+<body>
+    <h1>Favorites</h1>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/watchlist">My Watchlist</a>
+        <a href="/favorites">Favorites</a>
+    </nav>
+
+    <h2>My Favorite Movies and TV Shows</h2>
+
+    <div>
+        {% for item in favorites %}
+            <div>
+                <h3>{{ item[0] }}</h3>
+                <p>Type: {{ item[1] }}</p>
+                <p>Release year: {{ item[2] }}</p>
+                <p>IMDb rating: {{ item[3] }}</p>
+                <p>Status: {{ item[4] }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
