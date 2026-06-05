@@ -3,10 +3,10 @@ import psycopg2
 """ Connects to the PostgreSQL database and returns the connection object """
 def db_connection():
     conn = psycopg2.connect(
-        host="localhost",
-        database="watchflix", 
+        host="database",
+        database="watchflix_db", 
         user="postgres",
-        password="katlokal" 
+        password="123" 
     )
     return conn
 
