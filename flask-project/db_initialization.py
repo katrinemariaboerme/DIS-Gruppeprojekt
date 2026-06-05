@@ -15,9 +15,6 @@ def init_db():
     conn = db_connection()
     c = conn.cursor()
 
-    c.execute("DROP TABLE IF EXISTS Credits;")
-    c.execute("DROP TABLE IF EXISTS Content;")
-
     # I removed 'Users' TABLE, we can always add it if we have more time
     
     # Content, either movie or TV Show
@@ -43,6 +40,7 @@ def init_db():
             id SERIAL PRIMARY KEY,
             person_id INTEGER,
             content_id TEXT NOT NULL,
+            FOREIGN KEY (content_id) REFERENCES Content(content_id),
             name TEXT NOT NULL,
             character_name TEXT,
             role TEXT)""")
@@ -60,4 +58,3 @@ def init_db():
     conn.commit()
     c.close()
     conn.close()
-        

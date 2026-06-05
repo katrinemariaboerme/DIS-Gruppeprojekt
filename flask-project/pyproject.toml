@@ -3,7 +3,7 @@ name = "watchflix"
 version = "1.0.0"
 dependencies = [
     "flask (==3.1.1)",
-    "psycopg2 (==2.9.10)",
+    "psycopg2-binary",
 ]
 
 [tool.setuptools]
