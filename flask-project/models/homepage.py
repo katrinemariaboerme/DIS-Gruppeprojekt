@@ -3,26 +3,30 @@ from database import db_connection
 
 def get_content_homepage():
     conn = db_connection()
+    c = conn.cursor()
 
-    content = conn.execute("""
-        SELECT content_id, title, content_type, release_year, imdb_rating
+    content = c.execute("""
+        SELECT content_id, title, show_type, release_year, imdb_score
         FROM Content
         ORDER BY title
-    """).fetchall()
+    """)
 
+    content = c.fetchall()
     conn.close()
     return content
 
 
 def search_content(search_term):
     conn = db_connection()
+    c = conn.cursor()
 
-    content = conn.execute("""
-        SELECT content_id, title, content_type, release_year, imdb_rating
+    content = c.execute("""
+        SELECT content_id, title, show_type, release_year, imdb_score
         FROM Content
-        WHERE title LIKE ?
+        WHERE title LIKE %s
         ORDER BY title
-    """, (f"%{search_term}%",)).fetchall()
-
+    """, (f"%{search_term}%",))
+    
+    content = c.fetchall()
     conn.close()
     return content

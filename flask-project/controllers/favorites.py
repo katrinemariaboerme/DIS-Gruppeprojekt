@@ -1,6 +1,6 @@
-from flask import Blueprint,  render_template, request
-from models.favorites import add_to_favorites, get_content_favorites
+from flask import Blueprint,  render_template, request, redirect
 from database import db_connection
+from models.favorites import get_content_favorites, add_to_favorites, remove_from_favorites
 
 bp = Blueprint('favorites', __name__, url_prefix='/')
 
@@ -8,6 +8,9 @@ bp = Blueprint('favorites', __name__, url_prefix='/')
 def favorites():
     if request.method == 'POST':
         content_id = request.form['content_id']
-        add_to_favorites(content_id) # and user id?
+        if content_id :
+            add_to_favorites(content_id)
+        return redirect('/favorites')
+    favorites_content = get_content_favorites()    
 
-    return render_template('favorites.html', favorites=get_content_favorites())
+    return render_template('favorites.html', favorites=favorites_content)

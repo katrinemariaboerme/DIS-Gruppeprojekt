@@ -15,6 +15,9 @@ def init_db():
     conn = db_connection()
     c = conn.cursor()
 
+    # we drop the tables if they already exists
+    c.execute("DROP TABLE IF EXISTS Watchlist;")
+    c.execute("DROP TABLE IF EXISTS Favourites;")
     c.execute("DROP TABLE IF EXISTS Credits;")
     c.execute("DROP TABLE IF EXISTS Content;")
 
@@ -47,15 +50,21 @@ def init_db():
             character_name TEXT,
             role TEXT)""")
     
-    # User content lists is the watchlist or the favourites
-#    c.execute("""CREATE TABLE IF NOT EXISTS UserContentList (
-#           user_id INTEGER NOT NULL,
-#           content_id TEXT NOT NULL,
-#           status TEXT NOT NULL,
-#           added_at TEXT DEFAULT CURRENT_TIMESTAMP,
-#           PRIMARY KEY (user_id, content_id),
-#           FOREIGN KEY (user_id) REFERENCES Users(user_id),
-#           FOREIGN KEY (content_id) REFERENCES Content(content_id))""")
+    # The watchlist, not depending on a user as we wew short on time
+    c.execute("""CREATE TABLE IF NOT EXISTS Watchlist (
+           content_id TEXT NOT NULL,
+           status TEXT NOT NULL,
+           added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+           PRIMARY KEY (content_id),
+           FOREIGN KEY (content_id) REFERENCES Content(content_id))""")
+    
+    # The favourites list, not depending on a user as we wew short on time
+    c.execute("""CREATE TABLE IF NOT EXISTS Favourites (
+           content_id TEXT NOT NULL,
+           status TEXT NOT NULL,
+           added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+           PRIMARY KEY (content_id),
+           FOREIGN KEY (content_id) REFERENCES Content(content_id))""")
     
     conn.commit()
     c.close()

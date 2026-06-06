@@ -1,43 +1,46 @@
 from database import db_connection
 
 
-def get_content_watchlist(user_id):
+def get_content_watchlist():
     conn = db_connection()
+    c = conn.cursor()
 
-    watchlist = conn.execute("""
-        SELECT c.content_id, c.title, c.content_type, c.release_year, c.imdb_rating, ucl.status
-        FROM UserContentList ucl
+    watchlist = c.execute("""
+        SELECT c.content_id, c.title, c.show_type, c.release_year, c.imdb_score, ucl.status
+        FROM Watchlist ucl
         JOIN Content c ON ucl.content_id = c.content_id
-        WHERE ucl.user_id = ?
-        AND ucl.status = 'want_to_watch'
+        WHERE ucl.status = 'want_to_watch'
         ORDER BY ucl.added_at DESC
-    """, (user_id,)).fetchall()
+    """)
+    watchlist = c.fetchall()
 
     conn.close()
     return watchlist
 
 
-def add_to_watchlist(content_id, user_id):
+def add_to_watchlist(content_id):
     conn = db_connection()
+    c = conn.cursor()
 
-    conn.execute("""
-        INSERT OR IGNORE INTO UserContentList (user_id, content_id, status)
-        VALUES (?, ?, 'want_to_watch')
-    """, (user_id, content_id))
+    c.execute("""
+        INSERT INTO Watchlist (content_id, status)
+        VALUES (%s, 'want_to_watch')
+        ON CONFLICT DO NOTHING
+    """, (content_id,))
 
     conn.commit()
     conn.close()
 
 
-def remove_from_watchlist(content_id, user_id):
+def remove_from_watchlist(content_id):
     conn = db_connection()
+    c = conn.cursor()
 
-    conn.execute("""
-        DELETE FROM UserContentList
-        WHERE user_id = ?
-        AND content_id = ?
+    c.execute("""
+        DELETE FROM Watchlist
+        WHERE content_id = %s
         AND status = 'want_to_watch'
-    """, (user_id, content_id))
+    """, (content_id))
 
     conn.commit()
     conn.close()
