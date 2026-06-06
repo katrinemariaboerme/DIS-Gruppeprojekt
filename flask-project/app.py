@@ -1,8 +1,5 @@
 from flask import Flask
-from database import init_db
 from controllers import watchlist, favorites, homepage
-
-init_db()
 
 app = Flask(__name__)
 

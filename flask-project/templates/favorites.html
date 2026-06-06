@@ -21,11 +21,10 @@
         <div class="movie-container">
             {% for item in favorites %}
                 <div class="movie-card">
-                    <h3>{{ item[0] }}</h3>
-                    <p>Type: {{ item[1] }}</p>
-                    <p>Release year: {{ item[2] }}</p>
-                    <p>IMDb rating: {{ item[3] }}</p>
-                    <p>Status: {{ item[4] }}</p>
+                    <h3>{{ item[1] }}</h3>
+                    <p>Type: {{ item[2] }}</p>
+                    <p>Release year: {{ item[3] }}</p>
+                    <p>IMDb rating: {{ item[4] }}</p>
                 </div>
             {% endfor %}
         </div>

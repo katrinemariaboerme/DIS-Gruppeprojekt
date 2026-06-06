@@ -39,7 +39,7 @@ def remove_from_favorites(content_id):
         DELETE FROM Favourites
         WHERE content_id = %s
         AND status = 'favorite'
-    """, (content_id))
+    """, (content_id,))
 
     conn.commit()
     conn.close()

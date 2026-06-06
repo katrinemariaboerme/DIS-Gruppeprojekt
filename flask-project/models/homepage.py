@@ -8,7 +8,8 @@ def get_content_homepage():
     content = c.execute("""
         SELECT content_id, title, show_type, release_year, imdb_score
         FROM Content
-        ORDER BY title
+        ORDER BY imdb_score DESC NULLS LAST
+        LIMIT 500;
     """)
 
     content = c.fetchall()
@@ -24,7 +25,7 @@ def search_content(search_term):
         SELECT content_id, title, show_type, release_year, imdb_score
         FROM Content
         WHERE title LIKE %s
-        ORDER BY title
+        ORDER BY imdb_score
     """, (f"%{search_term}%",))
     
     content = c.fetchall()
