@@ -1,7 +1,8 @@
-# DIS-Gruppeprojekt - WatchFlix Documentation
+# DIS-Gruppeprojekt - <br>WatchFlix Documentation
 
-Group members: 
-KU-ID: bwd374 (bwd374@alumni.ku.dk)
+Group members: <br>
+
+KU-ID: bwd374 (bwd374@alumni.ku.dk) <br>
 KU-ID: tdf414 (tdf414@alumni.ku.dk)
 
 ## Project description
@@ -36,14 +37,14 @@ docker compose exec web python db_initialization.py
 
 The command docker compose exec *container name* *command* executes a command inside the specified container which in our case is called 'web' and then runs our script `db_initialization.py` which creates new tables and populates them with our data from the `/data` folder.
 
-Paste this address in the preferred browser
+Paste this address in the preferred browser: <br>
 
-http://127.0.0.1:5001
+http://127.0.0.1:5001 <br>
 
-This will display our homepage. Clicking the interactive 'Favorites' or 'Watchlist buttons' will send you to the Favorites and Watchlist pages. Or you can paste in these addresses:
+This will display our homepage. Clicking the interactive 'Favorites' or 'Watchlist buttons' will send you to the Favorites and Watchlist pages. Or you can paste in one of these addresses:
 
-http://127.0.0.1:5001/favorites
-http://127.0.0.1:5001/watchlist
+http://127.0.0.1:5001/favorites - to see favorites page<br>
+http://127.0.0.1:5001/watchlist - to see watchlist page<br>
 
 To add a movie or show to favorites and/or watchlist press the "Add to watchlist" or "Favorite" button on the preferred movie(s).
 
@@ -96,24 +97,29 @@ Our project follows the MVC structure. We have relied heavily on the handed out 
 Other non-trivial files:
 - `database.py` handles database connection 
 - `db_initialization.py` handles the creation of the tables and the logic for populating them
-- `app.py` handles instanziation of the Flask obejct, registration of blueprints and running the app
+- `app.py` handles instanziation of the Flask obejct, registration of blueprints
 ---
 
 ## E/R diagram
 
 ![E/R diagram](flask-project/static/er-diagram.png)
 
-The E/R diagram shows the current state of our WatchFlix database.
+We have used the 'diagrams.net' (previously called draw.io) software to create the E/R diagram.
+
+The E/R diagram shows the current state of our WatchFlix database. 
 
 The main entity set is `Content`, which represents both movies and TV shows. We chose to use one shared `Content` entity instead of separate entities for movies and TV shows, because both types share the exact same attributes, such as content_id, title, content type, release year etc.
 
-We have two weak etities `Favorites` and `Watchlist` with their owner being the Content entity set. These tables store the content that the person interacting with the web application, adds to the lists. They are weak as they can only be identified by `Content`'s primary key 'content_id' which they reference in their tables. 
+We have two weak etities `Favorites` and `Watchlist` with their owner being the Content entity set. These tables store the content that the person interacting with the web application, adds to their Favorites or Watchlist. They are weak as they can only be identified by `Content`'s primary key 'content_id' which they reference in their tables. Their relations to `Content` is a one-to-one relationship as a Content entity occurs *exactly one* time in the Content table and that specific entity can occur (be referenced) *at most one* time in the `Favorites` and `Watchlist` tables. We uphold this referential integrity by using foreign keys in `db_initialization.py` (line 47-48 and line 55-56):
+
+`PRIMARY KEY (content_id)`
+`FOREIGN KEY (content_id) REFERENCES Content(content_id)`
+
+We first create the attribute content_id and declare it the primary key, then we use the the same attribute as a foreign key to reference the primary key of the `Content`table. 
+
 They also store a `status`, for example whether the content is in the watchlist or marked as a favourite.
 
-The `Credits` entity set stores information about actors and directors. Since one actor/director can appear in many different movies or shows, and one movie or show can have many actors and directors, this is a many-to-many relation. Allthough we don't utilize them in our application (yet) we have still created a table and populated it to show how they relate to Content (see `db_initialization.py`) and to have the possibility of extending our app to also utilize `Credits`.
-
-
-**TILFØJ/OPDATER med resten af info fra opdateret ER DIAGRAM**
+The `Credits` entity set stores information about actors and directors. Since one actor/director can appear in many different movies or shows, and one movie or show can have many actors and directors, this is a many-to-many relation. Allthough we don't utilize them in our application (yet) we have still created a table and populated it to show how they relate to Content (see `db_initialization.py`) and to have the possibility of extending our app to also utilize `Credits` in the future.
 
 ---
 
@@ -184,7 +190,7 @@ If we had more time we would have made unit tests that tested each functionality
 
 We are also aware that the content can't be deleted once added to one of the lists, but we did not have the time.
 
-We used a different port (port 5001 instead of standard port 5000) to avoid port conflicts as we are both working on Macs where port 5000 is already occupied.
+We used a different port (port 5001 instead of standard port 5000) to avoid port conflicts as we are both working on Mac's where port 5000 is already occupied.
 
 ___
 
@@ -209,8 +215,6 @@ Or reset the database completely, including the database volume, run:
 ```bash
 docker compose down -v
 ```
-
-After this, the database will be recreated the next time the application is started.
 
 ---
 
