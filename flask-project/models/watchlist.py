@@ -30,17 +30,3 @@ def add_to_watchlist(content_id):
 
     conn.commit()
     conn.close()
-
-
-def remove_from_watchlist(content_id):
-    conn = db_connection()
-    c = conn.cursor()
-
-    c.execute("""
-        DELETE FROM Watchlist
-        WHERE content_id = %s
-        AND status = 'want_to_watch'
-    """, (content_id))
-
-    conn.commit()
-    conn.close()

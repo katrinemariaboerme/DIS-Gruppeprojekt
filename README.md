@@ -2,52 +2,114 @@
 
 ## Project description
 
-WatchFlix is a small Flask web application for browsing movies and TV shows. The application uses a PostgreSQL database and runs through Docker Compose.
+Our web application is called 'WatchFlix'. It is a web application for browsing movies and TV shows. It utilizes the Flask micro-framework, a PostgreSQL database and Docker for packaging our environment into a container.
 
-The user can:
+The functionality of our app is fairly simple due to time contstraints. The possible actions are:
 
-- view movies and TV shows on the home page
-- add content to a watchlist
-- mark content as favourite
+- Browse movies and TV shows on the homepage
+- add content to a watchlist 
+- add content to a favourites list
 - view the watchlist
 - view favourites
 
-The project follows an MVC-inspired structure:
+## How to run our application and interact with it
+
+Clone the repository to the preferred location.
+
+As our application relies on Docker, Docker must be installed and running before attempting to start the container. Only when this is done:
+
+navigate to the location of the '/DIS-Gruppeprojekt/flask-project' folder and run:
+
+```bash
+docker compose up
+```
+
+which builds the container, then create a new terminal window and navigate to location of the '/DIS-Gruppeprojekt/flask-project' again and run the initialization script:
+
+```bash
+docker compose exec web python db_initialization.py
+```
+
+The command docker compose exec *container name* *command* executes a command inside the specified container which in our case is called 'web' and then runs our script `db_initialization.py` which creates new tables and populates them with our data from the `/data` folder.
+
+Paste this address in the preferred browser
+
+http://127.0.0.1:5001
+
+This will display our homepage. Clicking the interactive 'Favorites' or 'Watchlist buttons' will send you to the Favorites and Watchlist pages. Or you can paste in these addresses:
+
+http://127.0.0.1:5001/favorites
+http://127.0.0.1:5001/watchlist
+
+To add a movie or show to favorites and/or watchlist press the "Add to watchlist" or "Favorite" button on the preferred movie(s).
+
+---
+
+## Project structure
+
+```text
+flask-project/
+│
+├── app.py
+├── database.py
+├── db_initialization.py
+├── docker-compose.yml
+├── Dockerfile
+├── entrypoint.sh
+├── pyproject.toml
+│
+├── controllers/
+│   ├── homepage.py
+│   ├── watchlist.py
+│   └── favorites.py
+│
+├── models/
+│   ├── homepage.py
+│   ├── watchlist.py
+│   └── favorites.py
+│
+├── templates/
+│   ├── index.html
+│   ├── watchlist.html
+│   └── favorites.html
+│
+├── static/
+│   ├── style.css
+│   └── er-diagram.jpg
+│
+└── data/
+    ├── titles.csv
+    └── credits.csv
+```
+
+Our project follows the MVC structure. We have relied heavily on the handed out implementation on https://github.com/rafaelcgs10/dis2025/tree/main/minimal_mvc_pg:
 
 - `controllers/` handles routes and user requests
 - `models/` handles database queries
 - `templates/` contains the HTML pages
 - `static/` contains CSS and static files
-- `database.py` handles database connection and table initialization
 
+Other non-trivial files:
+- `database.py` handles database connection 
+- `db_initialization.py` handles the creation of the tables and the logic for populating them
+- `app.py` handles instanziation of the Flask obejct, registration of blueprints and running the app
 ---
 
 ## E/R diagram
 
-![E/R diagram](static/er-diagram.jpg)
+![E/R diagram](static/er-diagram.jpg) 
 
-The E/R diagram shows the intended database model for WatchFlix.
+The E/R diagram shows the current state of our WatchFlix database.
 
-The main entity is `Content`, which represents both movies and TV shows. We chose to use one shared `Content` entity instead of separate entities for movies and TV shows, because both types of content share many attributes, such as title, content type, release year and IMDb rating.
+The main entity set is `Content`, which represents both movies and TV shows. We chose to use one shared `Content` entity instead of separate entities for movies and TV shows, because both types share the exact same attributes, such as content_id, title, content type, release year etc.
 
-The `User` entity represents a user of the application. A user has a `user_id`, username, email and password. The email is unique so that two users cannot register with the same email.
+We have two weak etities `Favorites` and `Watchlist` with their owner being the Content entity set. These tables store the content that the person interacting with the web application, adds to the lists. They are weak as they can only be identified by `Content`'s primary key 'content_id' which they reference in their tables. 
+They also store a `status`, for example whether the content is in the watchlist or marked as a favourite.
 
-The relationship between `User` and `Content` is handled by the junction table `UserContentList`. This table stores which content a user has added to their list. It also stores a `status`, for example whether the content is in the watchlist or marked as a favourite. The primary key is the combination of `user_id` and `content_id`, because the same user should not have the same content item twice in their list.
+The `Credits` entity set stores information about actors and directors. Since one actor/director can appear in many different movies or shows, and one movie or show can have many actors and directors, this is a many-to-many relation. Allthough we don't utilize them in our application (yet) we have still created a table and populated it to show how they relate to Content (see `db_initialization.py`) and to have the possibility of extending our app to also utilize `Credits`.
 
-The `Actor` entity stores information about actors. Since one actor can appear in many movies or shows, and one movie or show can have many actors, this is a many-to-many relationship. Therefore, we use the junction table `ContentActor`.
 
-The `Genre` entity stores genres such as comedy, drama or action. Since one content item can have many genres, and one genre can belong to many content items, this is also a many-to-many relationship. Therefore, we use the junction table `ContentGenre`.
-
-The main relationships are:
-
-- One `User` can have many rows in `UserContentList`.
-- One `Content` item can appear in many users' content lists.
-- One `Content` item can have many actors.
-- One `Actor` can appear in many content items.
-- One `Content` item can have many genres.
-- One `Genre` can belong to many content items.
-
-Because of time limitations, the implemented database was simplified compared to the full E/R diagram. In the implementation, we did not include individual users, actors and genres as separate tables. Instead, the implemented version uses `Content`, `Credits`, `Watchlist` and `Favourites`.
+**TILFØJ/OPDATER med resten af info fra opdateret ER DIAGRAM**
 
 ---
 
@@ -96,167 +158,31 @@ Favourites(
 )
 ```
 
-The `Content` table stores movie and TV show information. This includes title, type, release year, runtime, genres and IMDb score.
-
-The `Credits` table stores actor and director data. In the full E/R design, actors would have been separated into their own `Actor` table, but in the implemented version the name and role are stored directly in `Credits`.
-
-The `Watchlist` table stores content added to the watchlist.
-
-The `Favourites` table stores content marked as favourite.
-
-The implemented database is therefore a simplified version of the E/R diagram.
+- The table `Content` stores movie and TV show information. This includes title, type, release year, runtime, genre and IMDb score.
+- The `Credits` table stores actor and director data and content_id which is the way that Credits relate to Content.
+- The `Watchlist` table stores content added to the watchlist.
+- The `Favourites` table stores content added to favourites.
+- The implemented database is however only partially used, as we don't utilize the `Credits` table yet
 
 ---
 
-## Project structure
+## Limitations and ambiguities
 
-```text
-flask-project/
-│
-├── app.py
-├── database.py
-├── db_initialization.py
-├── docker-compose.yml
-├── Dockerfile
-├── entrypoint.sh
-├── pyproject.toml
-│
-├── controllers/
-│   ├── homepage.py
-│   ├── watchlist.py
-│   └── favorites.py
-│
-├── models/
-│   ├── homepage.py
-│   ├── watchlist.py
-│   └── favorites.py
-│
-├── templates/
-│   ├── index.html
-│   ├── watchlist.html
-│   └── favorites.html
-│
-├── static/
-│   ├── style.css
-│   └── er-diagram.jpg
-│
-└── data/
-    ├── titles.csv
-    └── credits.csv
-```
+Allthough we both were very ambitious in the beginning of the project, wanting to implement different sorting algorithms displaying the convenience of the relation between Content and `Credits` or the ability to host multiple users, we realized later on that there goes a lot of work into actually setting up and getting to know all the different software and files. 
 
----
+We therefore adjusted our expectations so that our application does not feature any users with unique usernames and passwords. Furthermore we have implemented `Credits` in our db_initialization.py script but we never utilize it after instantiating it. If we had more time we would have implemented the neccesary logic and styling to display and search after movies based on specific actors or directors.
 
-## How to compile the web app from source
+Our application does not feature any unit test, which is also problematic as we cannot assure for the correctness of our code. We have however "played" around with the application and investigated it's behaviour through exploring differnet scenarios such as adding movies and shows to the watchlist and favorites, respectively, adding the same movie twice, investigating and then controlled the extend of the displayed content. 
 
-The application is written in Python. In this project, "compile from source" means building the Docker image and starting the required containers.
+For example, we choose to display only the first 500 movies and tv-shows on the homepage instead of the actual thousands. We did this as the performance was very bad but to change this you can change or remove the limit of instances shown, at *line 12 in flask-project/models/homepage.py*.
 
-The project uses Docker Compose with two services:
+If we had more time we would have made unit tests that tested each functionality, for example testing that check a movie (after being added to favorites) actually does exist in the actual Favorites table.
 
-- `web`: the Flask application
-- `database`: the PostgreSQL database
+We are also aware that the content can't be deleted once added to one of the lists, but we did not have the time.
 
-Before running the project, Docker Desktop must be installed and running.
+We used a different port (port 5001 instead of standard port 5000) to avoid port conflicts as we are both working on Macs where port 5000 is already occupied.
 
-The commands below assume that you are in the `flask-project` folder. From the repository root, first run:
-
-```bash
-cd flask-project
-```
-
-Then build and start the project with:
-
-```bash
-docker compose up --build
-```
-
-This command:
-
-1. builds the Flask web container from the `Dockerfile`
-2. installs the Python dependencies from `pyproject.toml`
-3. starts the PostgreSQL database container
-4. waits for the database to be ready
-5. starts the Flask application
-
-The database is initialized through the `init_db()` function in `database.py`. This function connects to PostgreSQL and creates the required tables if they do not already exist.
-
-The database connection in Docker uses:
-
-```python
-host="database"
-database="watchflix_db"
-user="postgres"
-password="123"
-```
-
-These values match the PostgreSQL service defined in `docker-compose.yml`.
-
----
-
-## How to run and interact with the web app
-
-To run the web application, first start Docker Desktop.
-
-Then open a terminal and go to the project folder:
-
-```bash
-cd flask-project
-```
-
-Start the application with:
-
-```bash
-docker compose up --build
-```
-
-When the containers are running, open the application in a browser:
-
-```text
-http://localhost:5001
-```
-
-The reason the application runs on port `5001` is that `docker-compose.yml` maps port `5001` on the local computer to port `5000` inside the Flask container:
-
-```yaml
-ports:
-  - "5001:5000"
-```
-
----
-
-## Pages in the application
-
-### Home page
-
-URL:
-
-```text
-http://localhost:5001/
-```
-
-The home page shows movies and TV shows from the database. From this page, the user can add content to the watchlist or mark content as favourite.
-
-### Watchlist page
-
-URL:
-
-```text
-http://localhost:5001/watchlist
-```
-
-The watchlist page shows content that has been added to the watchlist.
-
-### Favourites page
-
-URL:
-
-```text
-http://localhost:5001/favorites
-```
-
-The favourites page shows content that has been marked as favourite.
-
----
+___
 
 ## How to stop the application
 
@@ -274,7 +200,7 @@ To remove the running containers, run:
 docker compose down
 ```
 
-To reset the database completely, including the database volume, run:
+Or reset the database completely, including the database volume, run:
 
 ```bash
 docker compose down -v
@@ -286,10 +212,16 @@ After this, the database will be recreated the next time the application is star
 
 ## AI declaration
 
-We used AI tools during the project. ChatGPT was used as an assistant.
+We have used Generative AI for the project. The following LLM's was used: 
 
-AI was used to help with:
+ChatGPT was used for:
 
 - understanding Flask, Docker and PostgreSQL errors
 - debugging route, template and database issues
+
+and Gemini was used to:
+
+- Debugging/clarifying error messages
+- Understanding/learning the flask-micro framework and Docker in order to utilize it
+- Documentation lookups 
 

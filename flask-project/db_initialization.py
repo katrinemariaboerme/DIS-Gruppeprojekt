@@ -6,13 +6,11 @@ def init_db():
     conn = db_connection()
     c = conn.cursor()
 
-    # we drop the tables if they already exists
+    # we drop the tables if they already exist
     c.execute("DROP TABLE IF EXISTS Watchlist;")
     c.execute("DROP TABLE IF EXISTS Favourites;")
     c.execute("DROP TABLE IF EXISTS Credits;")
     c.execute("DROP TABLE IF EXISTS Content;")
-
-    # I removed 'Users' TABLE, we can always add it if we have more time
     
     # Content, either movie or TV Show
     c.execute("""CREATE TABLE IF NOT EXISTS Content (
@@ -117,5 +115,5 @@ def fill_db():
         conn.commit()
         conn.close()
         
-init_db() # initializes the tables for the databaset
-fill_db() # Lastly we fill the tables with the data from the csv files
+init_db() 
+fill_db()

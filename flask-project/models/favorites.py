@@ -29,17 +29,3 @@ def add_to_favorites(content_id):
     """, (content_id,))
     conn.commit()
     conn.close()
-
-
-def remove_from_favorites(content_id):
-    conn = db_connection()
-    c = conn.cursor()
-
-    c.execute("""
-        DELETE FROM Favourites
-        WHERE content_id = %s
-        AND status = 'favorite'
-    """, (content_id,))
-
-    conn.commit()
-    conn.close()
