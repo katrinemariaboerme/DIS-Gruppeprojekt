@@ -97,7 +97,7 @@ Other non-trivial files:
 
 ## E/R diagram
 
-![E/R diagram](static/er-diagram.jpg) 
+![E/R diagram](flask-project/static/er-diagram.png)
 
 The E/R diagram shows the current state of our WatchFlix database.
 
