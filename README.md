@@ -1,5 +1,9 @@
 # DIS-Gruppeprojekt - WatchFlix Documentation
 
+Group members: 
+KU-ID: bwd374 (bwd374@alumni.ku.dk)
+KU-ID: tdf414 (tdf414@alumni.ku.dk)
+
 ## Project description
 
 Our web application is called 'WatchFlix'. It is a web application for browsing movies and TV shows. It utilizes the Flask micro-framework, a PostgreSQL database and Docker for packaging our environment into a container.
