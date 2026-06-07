@@ -1,4 +1,4 @@
-# DIS-Gruppeprojekt - <br>WatchFlix Documentation
+# DIS Group Project - WatchFlix
 
 Group members: <br>
 
@@ -232,4 +232,3 @@ and Gemini was used to:
 - Debugging/clarifying error messages
 - Understanding/learning the flask-micro framework and Docker in order to utilize it
 - Documentation lookups 
-
