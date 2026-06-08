@@ -176,6 +176,15 @@ Favourites(
 
 ---
 
+## Use of regular expressions
+
+We make use of a regular expression in `db_initialization.py`. The function `check_id(content_id)` takes a string as input (a 'content_id' value from the titles.csv file) which constitute some movie or show's unique id, and returns a boolean value. The id is matched to the regular expression `t[ms][0-9]{1,7}$` to assert that the string id follows that exact pattern, namely that it starts with a 't' and then follows either 'm' or 's', followed by 1 to 7 numbers from 0-9 and with ending symbol '$'. To do that we used the re library's `fullmatch()` function which takes a regular expression and a string and returns the match obejct if the input matches the regular expression, else None. We then call the function in `fill_db()` right before inserting an entity into the database and let the the return value (true for match, false if None) decide whether a title should be inserted into the databse. 
+
+The content_id attribute is the primary key and therefore the only way of identying and separating that unique Content entity from other instances.
+By checking that the id is valid we prevent invalid movies from entering our table, if there should be any. For this project we are pretty sure that they are all valid, but for example if our application was public and featured multiple users with rights to add content to the database this code would enforce correctness and prevent invalid entities that could change the behaviour of our program.
+
+___
+
 ## Limitations and ambiguities
 
 Allthough we both were very ambitious in the beginning of the project, wanting to implement different sorting algorithms displaying the convenience of the relation between Content and `Credits` or the ability to host multiple users, we realized later on that there goes a lot of work into actually setting up and getting to know all the different software and files. 
